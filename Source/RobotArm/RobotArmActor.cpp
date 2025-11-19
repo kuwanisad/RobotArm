@@ -98,6 +98,32 @@ void ARobotArmActor::GetReachablePosition(FVector OriginalPosition, FVector& Rea
 
 }
 
+void ARobotArmActor::GrabCoin(ACoin* _Coin)
+{
+	if (IsValid(_Coin) == false)
+	{
+		return;
+	}
+
+	if (IsValid(Coin))
+	{
+		return;
+	}
+
+	RemoveCoin();
+
+	Coin = _Coin;
+	Coin->AttachToComponent(Parts.Last(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+}
+
+void ARobotArmActor::RemoveCoin()
+{
+	if (IsValid(Coin))
+	{
+		Coin->Destroy();
+	}
+}
+
 // Called every frame
 void ARobotArmActor::Tick(float DeltaTime)
 {

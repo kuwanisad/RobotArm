@@ -24,7 +24,7 @@ class ROBOTARM_API AARRProjectGameState : public AGameStateBase
 protected:
 	int32 Score = 0;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, meta = (AllowPrivateAccess = true))
 	FOnScoreChanged OnScoreChanged;
 
 	UPROPERTY(EditAnywhere)

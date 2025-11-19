@@ -8,6 +8,8 @@
 #include "ARPawn.h"
 #include "GameFramework/PlayerController.h"
 #include "RobotArmDestination.h"
+#include "Kismet/GameplayStatics.h"
+
 
 void AARRProjectGameState::AddRobotArmDestination()
 {
@@ -44,15 +46,19 @@ ACoin* AARRProjectGameState::AddScoreAndSpawnCoin(int32 _Score)
 
 FVector AARRProjectGameState::SpawnReachablePosition()
 {
-	AARPawn* ARPawn = Cast<AARPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	
-	if (ARPawn == nullptr)
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARobotArmActor::StaticClass(), FoundActors);
+
+	ARobotArmActor* RobotArm = nullptr;
+	for (AActor* Actor : FoundActors)
 	{
-		return FVector::ZeroVector;
+		RobotArm = Cast<ARobotArmActor>(Actor);
+		if (RobotArm)
+		{
+			break;
+		}
 	}
-	
-	ARobotArmActor* RobotArm = ARPawn->RobotArm;
-	
+
 	if (RobotArm == nullptr)
 	{
 		return FVector::ZeroVector;
@@ -66,7 +72,8 @@ FVector AARRProjectGameState::SpawnReachablePosition()
 
 	Direction = Angle.RotateVector(Direction);
 	//Direction *= SpawnMinRadius + FMath::FRandRange(0, SpawnMaxRadius - SpawnMinRadius);
-	Direction *= 350;
+	Direction *= 290;
+	Direction.Y = FMath::Max(100, Direction.Y);
 
 	//FVector FinalPosition;
 
@@ -78,6 +85,8 @@ FVector AARRProjectGameState::SpawnReachablePosition()
 	//RobotArm->GetReachablePosition(RobotArm->GetActorLocation() + Direction, FinalPosition);
 
 	//return FinalPosition;
+
+	Direction.Z += 150;
 
 	return RobotArm->GetActorLocation() + Direction;
 }

@@ -40,15 +40,18 @@ void ARobotArmDestination::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor
 		return;
 	}
 
-	if (IsValid(OtherActor) && Cast<ARobotArmActor>(OtherActor))
+	if (IsValid(OtherActor))
 	{
-		if (AARRProjectGameState* GS = Cast<AARRProjectGameState>(GetWorld()->GetGameState()))
+		if (ARobotArmActor* RobotArm = Cast<ARobotArmActor>(OtherActor))
 		{
-			IsActive = false;
-			GS->AddScoreAndSpawnCoin(CoinScore);
-			Destroy();
+			if (AARRProjectGameState* GS = Cast<AARRProjectGameState>(GetWorld()->GetGameState()))
+			{
+				IsActive = false;
+				GS->AddScoreAndSpawnCoin(CoinScore);
+				RobotArm->RemoveCoin();
+				Destroy();
+			}
 		}
 	}
-
 }
 

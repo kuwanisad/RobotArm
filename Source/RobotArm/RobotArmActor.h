@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "RobotArmActor.generated.h"
 
-UStaticMeshComponent;
+class UStaticMeshComponent;
+class ACoin;
 
 UCLASS()
 class ROBOTARM_API ARobotArmActor : public AActor
@@ -24,11 +25,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<TObjectPtr<UStaticMeshComponent>> Parts;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TObjectPtr<UStaticMeshComponent>> Joints;
 
 	UPROPERTY(EditAnywhere)
 	bool Temp = false;
+
+	TObjectPtr<ACoin> Coin;
 
 public:	
 	// Called every frame
@@ -38,4 +41,7 @@ public:
 	반환값은 계산 수행 여부
 	*/
 	void GetReachablePosition(FVector OriginalPosition, FVector& ReachablePosition);
+
+	void GrabCoin(ACoin* _Coin);
+	void RemoveCoin();
 };

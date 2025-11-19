@@ -31,13 +31,13 @@ void ACoin::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, U
 		return;
 	}
 
-	if (IsValid(OtherActor) && Cast<ARobotArmActor>(OtherActor))
+	if (ARobotArmActor* RobotArm = Cast<ARobotArmActor>(OtherActor))
 	{
 		if (AARRProjectGameState* GS = Cast<AARRProjectGameState>(GetWorld()->GetGameState()))
 		{
 			IsActive = false;
 			GS->AddRobotArmDestination();
-			Destroy();
+			RobotArm->GrabCoin(this);
 		}
 	}
 }
